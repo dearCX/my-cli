@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+// console.log('hello connie')
+// 核心处理命令行
+const program = require('commander')
+
+// 处理当用户进行版本号控制的时候
+const printer = require('@darkobits/lolcatjs')
+
+// 前端写的shell
+const shelljs = require('shelljs')
+
+// 跟用户发生对话
+const chalk = require('chalk')
+
+// 跟用户进行交互
+const inquirer = require('inquirer')
+
+// program.version('0.0.1','-v, --verison')
+program.version(printer.default.fromString('connie.chen'), '-v, --verison')
+// program.command('init', '初始化我们的项目')
+const binHandler = {
+  init(){
+    console.log('消息')
+    inquirer.prompt([
+      // {
+      //   type: 'text',
+      //   message: '请输入文件夹名称',
+      //   choices: ['TypeScript', 'EcmaScript'],
+      //   name: 'dirname'
+      // },
+      {
+        type: 'list',
+        message: '请选择对应的语言',
+        choices: ['TypeScript', 'EcmaScript'],
+        name: 'kind'
+      }
+    ]).then(answer => {
+
+    })
+  }
+}
+
+program.usage('[cmd] <options>')
+       .arguments('<cmd> [env]')
+       .action((cmd,otherParms) => {
+          const handler = binHandler[cmd]
+          if (typeof handler === 'undefined') {
+            // chalk.yellow('非常遗憾【】暂未开发')
+            console.log(`${chalk.yellow('非常遗憾')}【${chalk.red(cmd)}】暂未开发 😳`)
+            process.exit(1)
+          } else {
+            handler(otherParms)
+          }
+       })
+program.parse(process.argv)
